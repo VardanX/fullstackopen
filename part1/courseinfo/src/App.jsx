@@ -6,6 +6,14 @@ const Header = ({course}) => {
   );
 }
 
+const Part = ({part, exercise}) => {
+  return (
+    <>
+      <p>{part} {exercise}</p>
+    </>
+  );
+}
+
 const Content = ({
   part1,
   part1exercises,
@@ -16,9 +24,9 @@ const Content = ({
 }) => {
   return (
     <>
-      <p>{part1} {part1exercises}</p>
-      <p>{part2} {part2exercises}</p>
-      <p>{part3} {part3exercises}</p>
+      <Part part={part1} exercise={part1exercises}/>
+      <Part part={part2} exercise={part2exercises}/>
+      <Part part={part3} exercise={part3exercises}/>
     </>
   );
 }
@@ -52,7 +60,7 @@ const App = () => {
         part3={part3}
         part3exercises={exercises3}
       />
-      
+
       <Total total={exercises1 + exercises2 + exercises3}/>
     </div>
   )
