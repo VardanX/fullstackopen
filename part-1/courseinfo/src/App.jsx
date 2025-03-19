@@ -1,70 +1,48 @@
-const Header = (props) => {
-  return (
-    <>
-      <h1>{props.course.name}</h1>
-    </>
-  );
+function Header({courseName}){
+    return(
+        <>
+            <h1>{courseName}</h1>
+        </>
+    );
 }
 
-const Part = (props) => {
-
-  return (
-    <>
-      <p>{props.part.name} {props.part.exercises}</p>
-    </>
-  );
+function Content({part ,exercise}){
+    return(
+        <p>
+            {part} {exercise}
+        </p>
+    );
 }
 
-const Content = ({course}) => {
-  let parts = course.parts;
-  let [part1, part2, part3] = parts;
-  return (
-    <>
-      <Part part={part1}/>
-      <Part part={part2}/>
-      <Part part={part3}/>
-    </>
-  );
+function Total({total}){
+    return (
+      <>
+        <p>Number of exercises {total}</p>
+      </>
+    );
 }
 
-const Total = ({course}) => {
-  return(
-    <>
-      <p>Number of exercises{" "}
-        {course.parts[0].exercises+
-         course.parts[1].exercises+
-         course.parts[2].exercises
-        }</p>
-    </>
-  );
-}
 
 const App = () => {
-  const course = {
-    name: 'Half Stack application development',
-    parts: [
-      {
-        name: 'Fundamentals of React',
-        exercises: 10
-      },
-      {
-        name: 'Using props to pass data',
-        exercises: 7
-      },
-      {
-        name: 'State of a component',
-        exercises: 14
-      }
-    ]
-  }
+  const course = "Half Stack application development";
+  const part1 = "Fundamentals of React";
+  const exercises1 = 10;
+  const part2 = "Using props to pass data";
+  const exercises2 = 7;
+  const part3 = "State of a component";
+  const exercises3 = 14;
 
   return (
     <div>
-      <Header course={course}/>
-      <Content course={course}/>
-      <Total course={course}/>
-    </div>
-  )
-}
+      <Header courseName={course} />
 
-export default App
+      <Content part={part1} exercise={exercises1} />
+      <Content part={part2} exercise={exercises2} />
+      <Content part={part3} exercise={exercises3} />
+
+       <Total  total={exercises1 + exercises2 + exercises3}/>
+    </div>
+  );
+};
+
+export default App;
