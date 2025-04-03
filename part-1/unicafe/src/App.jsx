@@ -1,17 +1,27 @@
 import { useState } from "react";
-
+import "./index.css"
 
 const Title = () => <h2>give feedback</h2>
 
 const Button = (props) => <button onClick={props.onClick}>{props.name}</button>
 
 const Statistics = ({goodCount, neutralCount, badCount}) => {
+
+  let total = goodCount + neutralCount + badCount
+  let average = (goodCount - badCount) / total
+  let positivePercentage = (goodCount / total) * 100
+
   return (
     <>
       <h2>statistics</h2>
-      <p>good {goodCount}</p>
-      <p>neutral {neutralCount}</p>
-      <p>bad {badCount}</p>
+      <ul style={{listStyleType:"none"}}>
+        <li>good {goodCount}</li>
+        <li>neutral {neutralCount}</li>
+        <li>bad {badCount}</li>
+        <li>all {total}</li>
+        <li>average {total === 0 ? 0 : average}</li>
+        <li>positive {total === 0 ? 0 : positivePercentage} %</li>
+      </ul>
     </>
   );
 }
@@ -26,14 +36,16 @@ const App = () => {
     <div>
       <Title />
 
-      <Button name="good" onClick={() => setGood(good + 1)} />
-      <Button name="neutral" onClick={() => setNeutral(neutral + 1)} />
-      <Button name="bad" onClick={() => setBad(bad + 1)} />
+      <Button name="good" onClick={() => setGood(good + 1)}/>
+      <Button name="neutral" onClick={() => setNeutral(neutral + 1)}/>
+      <Button name="bad" onClick={() => setBad(bad + 1)}/>
 
       <Statistics
         goodCount={good}
         neutralCount={neutral}
-        badCount={bad} />
+        badCount={bad}
+      />
+
     </div>
   );
 
