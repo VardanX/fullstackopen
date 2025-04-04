@@ -13,6 +13,14 @@ const Statistics = props => {
     let average = (goodCount - badCount) / total
     let positivePercentage = (goodCount / total) * 100
 
+    if(!total){
+        return(
+            <>
+                <h2>statistics</h2>
+                <h3>No feedback given</h3>
+            </>
+        )
+    }
     return (
     <>
         <h2>statistics</h2>
