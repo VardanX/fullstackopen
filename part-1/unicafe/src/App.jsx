@@ -6,11 +6,18 @@ const Title = () => <h2>give feedback</h2>
 const Button = (props) => <button onClick={props.onClick}>{props.feedback}</button>
 
 const StatisticLine = ({text, value}) => {
-    return(
-        <>
-            <li>{text} {value}</li>
-        </>
-    )
+    return (
+      <>
+        <table>
+          <tbody>
+            <tr>
+              <td>{text}</td>
+              <td>{value}</td>
+            </tr>
+          </tbody>
+        </table>
+      </>
+    );
 }
 
 const Statistics = props => {
