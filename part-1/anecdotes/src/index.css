@@ -67,7 +67,9 @@ button:focus-visible {
   }
 } */
 
-.nextAnecdote{
-  margin-top: 10px;
-  display: block;
+.button-div{
+  margin: 3px 1px;;
+  width: 300px;
+  display:flex;
+  gap: 1px;
 }

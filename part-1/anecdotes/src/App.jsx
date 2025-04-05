@@ -1,5 +1,17 @@
 import { useState } from "react";
 import "./index.css"
+
+const AnecdotesVotes = ({voteIndex, votes}) =>{
+  if(voteIndex in votes) {
+    return (
+      <>
+        <p>has {votes[voteIndex]} votes</p>
+      </>
+    );
+  }
+  return<p>has 0 votes</p>
+
+}
 const App = () => {
   const anecdotes = [
     "If it hurts, do it more often.",
@@ -12,31 +24,52 @@ const App = () => {
     "The only way to go fast, is to go well.",
   ];
 
-  // console.log(anecdotes.length)
-
   const [selected, setSelected] = useState(0);
+  const [votes, setVotes] = useState({
+    0: 0,
+    1: 0,
+    2: 0,
+    3: 0,
+    4: 0,
+    5: 0,
+    6: 0,
+    7: 0
+  });
 
   function handleClick(){
 
     let randomNum = Math.floor(Math.random() * anecdotes.length)
-
     while(randomNum === selected){
       randomNum = Math.floor(Math.random() * anecdotes.length);
     }
     setSelected(randomNum)
   }
 
-  return(
+  const handleVotes = () => {
+    let newVote = {
+      ...votes,
+    }
+    newVote[selected] = votes[selected] + 1
+    setVotes(newVote)
+  }
+
+  return (
     <div>
       {anecdotes[selected]}
-      <button
-        onClick={handleClick}
-        className="nextAnecdote"
-      >
-        next anecdote
-      </button>
+      <AnecdotesVotes voteIndex={selected} votes={votes}/>
+
+      <div className="button-div">
+
+        <button onClick={handleVotes}>
+          vote
+        </button>
+        <button onClick={handleClick} className="nextAnecdote">
+          next anecdote
+        </button>
+
+      </div>
     </div>
-  )
+  );
 };
 
 export default App;
