@@ -12,6 +12,18 @@ const AnecdotesVotes = ({voteIndex, votes}) =>{
   return<p>has 0 votes</p>
 
 }
+
+const TopAnecdote = ({anecdote, topKey, votes}) => {
+  return(
+    <>
+      <h2>Anecdote with most votes</h2>
+      <p>{anecdote[topKey]}</p>
+      <p>has {votes[topKey]} votes</p>
+    </>
+  )
+}
+
+// }
 const App = () => {
   const anecdotes = [
     "If it hurts, do it more often.",
@@ -35,6 +47,7 @@ const App = () => {
     6: 0,
     7: 0
   });
+  const [topVote, setTopVote] = useState(0);
 
   function handleClick(){
 
@@ -48,26 +61,45 @@ const App = () => {
   const handleVotes = () => {
     let newVote = {
       ...votes,
+      [selected]: votes[selected] + 1
     }
-    newVote[selected] = votes[selected] + 1
+    // newVote[selected] = votes[selected] + 1
     setVotes(newVote)
-  }
+
+    let maxKey = 0;
+    let maxValue = 0;
+    for (let key in votes) {
+      //using newVote instead of vote because react
+      //doesn't render immediately.
+      if (newVote[key] > maxValue) {
+        maxValue = newVote[key];
+        maxKey = key;
+      }
+    }
+    setTopVote(maxKey);
+  };
 
   return (
     <div>
+      <h2>Anecdotes of the day</h2>
       {anecdotes[selected]}
       <AnecdotesVotes voteIndex={selected} votes={votes}/>
 
       <div className="button-div">
-
         <button onClick={handleVotes}>
           vote
         </button>
         <button onClick={handleClick} className="nextAnecdote">
           next anecdote
         </button>
-
       </div>
+
+      <TopAnecdote
+        anecdote = {anecdotes}
+        topKey = {topVote}
+        votes = {votes}
+      />
+
     </div>
   );
 };
