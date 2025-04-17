@@ -1,3 +1,5 @@
+import Course from './components/Course.jsx'
+
 
 const Part = ({name, exercises}) => {
   return(
@@ -29,17 +31,6 @@ const Header = ({header}) => {
     </>
   )
 }
-
-
-const Course = ({course}) => {
-  return(
-    <div>
-      <Header header={course.name}/>
-      <Content content={course.parts}/>
-    </div>
-  )
-}
-
 
 const App = () => {
   const courses = [
@@ -97,5 +88,5 @@ const App = () => {
   );
 };
 
-
-export default App;
+export default App
+export {Content, Header, Part};
