@@ -17,7 +17,7 @@ const Content = ({content}) => {
   return(
     <div>
       {content.map(part => <Part {...part} key={part.id}/>)}
-      <b>total of {totalExercises} exercises</b>
+      <p>total of {totalExercises} exercises</p>
     </div>
   )
 }
@@ -44,30 +44,25 @@ const Course = ({course}) => {
 const App = () => {
   const course = {
     id: 1,
-    name: "Half Stack application development",
+    name: 'Half Stack application development',
     parts: [
       {
-        name: "Fundamentals of React",
+        name: 'Fundamentals of React',
         exercises: 10,
-        id: 1,
+        id: 1
       },
       {
-        name: "Using props to pass data",
+        name: 'Using props to pass data',
         exercises: 7,
-        id: 2,
+        id: 2
       },
       {
-        name: "State of a component",
+        name: 'State of a component',
         exercises: 14,
-        id: 3,
-      },
-      {
-        name: "Redux",
-        exercises: 11,
-        id: 4,
-      },
-    ],
-  };
+        id: 3
+      }
+    ]
+  }
 
   return <Course course={course} key={course.id}/>;
 }
