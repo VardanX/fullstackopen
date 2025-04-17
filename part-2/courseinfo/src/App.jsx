@@ -8,11 +8,16 @@ const Part = ({name, exercises}) => {
 }
 
 const Content = ({content}) => {
+
+  const totalExercises = content.reduce(
+    (total, part) => total + part.exercises,
+    0
+  );
+
   return(
     <div>
-      {
-        content.map(part => <Part {...part} key={part.id}/>)
-      }
+      {content.map(part => <Part {...part} key={part.id}/>)}
+      <p>total of {totalExercises} exercises</p>
     </div>
   )
 }
