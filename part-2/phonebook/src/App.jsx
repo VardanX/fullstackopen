@@ -7,7 +7,17 @@ const App = () => {
 
   const addPerson = (e) => {
     e.preventDefault();
-    setPersons([...persons, {name: newName}])
+    let isIncluded = false
+    persons.forEach(person => {
+      if(newName === person.name){
+        isIncluded = true
+      }
+    })
+    if(isIncluded){
+      window.alert(`${newName} is already added to the phonebook`)
+    }else{
+      setPersons([...persons, {name: newName}])
+    }
   }
 
   const handleNameChange = (e) => {
@@ -35,7 +45,7 @@ const App = () => {
 
       <h2>Numbers</h2>
       {persons.map(person => <p key={person.name}>{person.name}</p>)}
-      <div>debug: {newName}</div>
+      {/* <div>debug: {newName}</div> */}
 
     </div>
   );
