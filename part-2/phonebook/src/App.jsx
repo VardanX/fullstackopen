@@ -1,19 +1,23 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Filter from "./components/Filter.jsx"
 import PersonForm from "./components/PersonForm.jsx"
 import Persons from "./components/Persons.jsx"
+import axios from "axios";
+
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: "Arto Hellas", phoneNumber: "040-123456", id: 1 },
-    { name: "Ada Lovelace", phoneNumber: "39-44-5323523", id: 2 },
-    { name: "Dan Abramov", phoneNumber: "12-43-234345", id: 3 },
-    { name: "Mary Poppendieck", phoneNumber: "39-23-6423122", id: 4 },
-  ]);
+  const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newPhoneNumber, setNewPhoneNumber] = useState("")
   const [filterPerson, setFilterPerson] = useState("")
 
+  useEffect(() => {
+    axios
+    .get("http://localhost:3001/persons")
+    .then(response => {
+      setPersons(response.data)
+    });
+  }, []);
 
   const addPerson = (e) => {
     e.preventDefault();
@@ -26,7 +30,7 @@ const App = () => {
     if(isIncluded){
       window.alert(`${newName} is already added to the phonebook`)
     }else{
-      setPersons([...persons, {name: newName, phoneNumber: newPhoneNumber}])
+      setPersons([...persons, {name: newName, number: newPhoneNumber}])
     }
   }
 
@@ -65,7 +69,6 @@ const App = () => {
       <Persons
         phoneBookToShow={phoneBookToShow}
       />
-      <div>debug: {filterPerson}</div>
     </div>
   );
 };

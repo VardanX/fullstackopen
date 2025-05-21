@@ -4,7 +4,7 @@ const Persons = ({phoneBookToShow}) => {
         {phoneBookToShow.map((person) => {
           return (
             <p key={person.name}>
-              {person.name} {person.phoneNumber}
+              {person.name} {person.number}
             </p>
           );
         })}
