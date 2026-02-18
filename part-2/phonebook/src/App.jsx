@@ -18,6 +18,7 @@ const App = () => {
       setPersons(response.data)
     });
   }, []);
+  console.log(persons);
 
   const addPerson = (e) => {
     e.preventDefault();
@@ -30,7 +31,10 @@ const App = () => {
     if(isIncluded){
       window.alert(`${newName} is already added to the phonebook`)
     }else{
-      setPersons([...persons, {name: newName, number: newPhoneNumber}])
+      axios.post("http://localhost:3001/persons", {name: newName, number : newPhoneNumber})
+      .then(response => {
+        console.log(response);
+        setPersons(prev => [...prev, response.data])})
     }
   }
 
