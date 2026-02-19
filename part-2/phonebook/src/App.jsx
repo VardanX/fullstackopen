@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Filter from "./components/Filter.jsx"
 import PersonForm from "./components/PersonForm.jsx"
 import Persons from "./components/Persons.jsx"
-import {getContacts, createContact} from "./services/phonebook.js"
+import {getContacts, createContact, deleteContact} from "./services/phonebook.js"
 
 
 const App = () => {
@@ -11,7 +11,13 @@ const App = () => {
   const [newPhoneNumber, setNewPhoneNumber] = useState("")
   const [filterPerson, setFilterPerson] = useState("")
 
-  useEffect(() => {getContacts().then(contacts => setPersons(contacts))});
+  useEffect(() => {
+    getContacts().then(contacts => setPersons(contacts))
+    .catch((error) => {
+      alert("Server error");
+      console.log(error.message, error.name)
+    })
+  }, []);
 
   const addPerson = (e) => {
     e.preventDefault();
@@ -24,9 +30,9 @@ const App = () => {
     if(isIncluded){
       window.alert(`${newName} is already added to the phonebook`)
     }else{
-      createContact({ name: newName, number: newPhoneNumber }).then(
-        contact => setPersons((prev) => [...prev, contact])
-      );
+      createContact({ name: newName, number: newPhoneNumber })
+        .then((contact) => setPersons((prev) => [...prev, contact]))
+        .catch(() => alert("Something went wrong!"));
     }
   }
 
@@ -42,9 +48,22 @@ const App = () => {
     setFilterPerson(e.target.value)
   }
 
+  const handleDeleteContact = (id, name) => {
+
+    let deletePerson = window.confirm(`Delete ${name}`);
+    if(deletePerson){
+      deleteContact(id)
+      .then(
+        setPersons((persons) => persons.filter((person) => person.id != id))
+      )
+      .catch(() => alert("Something went wrong!"));
+    }
+  }
+
   const phoneBookToShow = filterPerson
         ? persons.filter(person => person.name.toLowerCase().includes(filterPerson.toLowerCase()))
         : persons
+
 
   return (
     <div>
@@ -64,6 +83,7 @@ const App = () => {
       <h2>Numbers</h2>
       <Persons
         phoneBookToShow={phoneBookToShow}
+        handleDeleteContact={handleDeleteContact}
       />
     </div>
   );
