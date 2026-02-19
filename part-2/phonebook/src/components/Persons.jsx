@@ -3,12 +3,12 @@ const Persons = ({phoneBookToShow,handleDeleteContact}) => {
       <div>
         {phoneBookToShow.map((person) => {
           return (
-            <p key={person.name}>
+            <p key={person.id}>
               {person.name} {person.number} <button onClick={() => {handleDeleteContact(person.id, person.name)}}>delete</button>
             </p>
           );
         })}
-      </div>
+      </div>  
     );
 }
 

@@ -2,10 +2,11 @@ import { useState, useEffect } from "react";
 import Filter from "./components/Filter.jsx"
 import PersonForm from "./components/PersonForm.jsx"
 import Persons from "./components/Persons.jsx"
-import {getContacts, createContact, deleteContact} from "./services/phonebook.js"
+import {getContacts, createContact, deleteContact, updateContact} from "./services/phonebook.js"
 
 
 const App = () => {
+  const [count , setCount] = useState(0)
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newPhoneNumber, setNewPhoneNumber] = useState("")
@@ -17,18 +18,25 @@ const App = () => {
       alert("Server error");
       console.log(error.message, error.name)
     })
-  }, []);
+  }, [count]);
 
   const addPerson = (e) => {
     e.preventDefault();
     let isIncluded = false
+    let personId = ""
     persons.forEach(person => {
       if(newName === person.name){
         isIncluded = true
+        personId = person.id
       }
     })
     if(isIncluded){
-      window.alert(`${newName} is already added to the phonebook`)
+      let replaceNumber = window.confirm(`${newName} is already added to the phonebook, replace the old number with new one?`);
+      if(replaceNumber){
+        updateContact(personId, { name: newName, number: newPhoneNumber })
+          .then(() => setCount(count + 1))
+          .catch((error) => console.log(error));
+      }
     }else{
       createContact({ name: newName, number: newPhoneNumber })
         .then((contact) => setPersons((prev) => [...prev, contact]))
@@ -49,7 +57,6 @@ const App = () => {
   }
 
   const handleDeleteContact = (id, name) => {
-
     let deletePerson = window.confirm(`Delete ${name}`);
     if(deletePerson){
       deleteContact(id)
@@ -63,7 +70,6 @@ const App = () => {
   const phoneBookToShow = filterPerson
         ? persons.filter(person => person.name.toLowerCase().includes(filterPerson.toLowerCase()))
         : persons
-
 
   return (
     <div>
