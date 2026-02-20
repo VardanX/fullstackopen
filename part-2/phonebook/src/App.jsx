@@ -16,8 +16,8 @@ const App = () => {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("")
 
-  function notify(msg, newName, error){
-    setMessage(`${msg} ${newName}`);
+  function notify(msg, error){
+    setMessage(`${msg}`);
     setError(error);
     setTimeout(() => {
       setError("");
@@ -49,15 +49,17 @@ const App = () => {
         updateContact(personId, { name: newName, number: newPhoneNumber })
           .then(() => {
             setCount(count + 1)
-            notify("Updated", newName, false)
+            notify(`Updated ${newName}`, false)
           })
-          .catch((error) => console.log(error));
+          .catch(() => {
+            notify(`Information about ${newName} has already been removed from the server`, newName, true)
+          });
       }
     }else{
       createContact({ name: newName, number: newPhoneNumber })
         .then((contact) => {
           setPersons((prev) => [...prev, contact])
-          notify("Added", newName, false)
+          notify(`Added ${newName}`, false)
         })
         .catch(() => alert("Something went wrong!"));
     }
