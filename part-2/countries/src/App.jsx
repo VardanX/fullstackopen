@@ -8,7 +8,6 @@ export default function App(){
   const [input, setInput] = useState("")
   const [countries, setCountries] = useState([])
 
-
   useEffect(() => {
     axios
       .get(`https://studies.cs.helsinki.fi/restcountries/api/all`)
