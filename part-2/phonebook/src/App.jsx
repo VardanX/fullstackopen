@@ -3,6 +3,8 @@ import Filter from "./components/Filter.jsx"
 import PersonForm from "./components/PersonForm.jsx"
 import Persons from "./components/Persons.jsx"
 import {getContacts, createContact, deleteContact, updateContact} from "./services/phonebook.js"
+import "./index.css"
+import Notification from "./components/Notification.jsx";
 
 
 const App = () => {
@@ -11,6 +13,17 @@ const App = () => {
   const [newName, setNewName] = useState("");
   const [newPhoneNumber, setNewPhoneNumber] = useState("")
   const [filterPerson, setFilterPerson] = useState("")
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("")
+
+  function notify(msg, newName, error){
+    setMessage(`${msg} ${newName}`);
+    setError(error);
+    setTimeout(() => {
+      setError("");
+      setMessage("");
+    }, 5000);
+  }
 
   useEffect(() => {
     getContacts().then(contacts => setPersons(contacts))
@@ -34,12 +47,18 @@ const App = () => {
       let replaceNumber = window.confirm(`${newName} is already added to the phonebook, replace the old number with new one?`);
       if(replaceNumber){
         updateContact(personId, { name: newName, number: newPhoneNumber })
-          .then(() => setCount(count + 1))
+          .then(() => {
+            setCount(count + 1)
+            notify("Updated", newName, false)
+          })
           .catch((error) => console.log(error));
       }
     }else{
       createContact({ name: newName, number: newPhoneNumber })
-        .then((contact) => setPersons((prev) => [...prev, contact]))
+        .then((contact) => {
+          setPersons((prev) => [...prev, contact])
+          notify("Added", newName, false)
+        })
         .catch(() => alert("Something went wrong!"));
     }
   }
@@ -73,6 +92,7 @@ const App = () => {
 
   return (
     <div>
+      <Notification error={error} message={message}/>
       <h2>Phonebook</h2>
       <Filter
         onChange={handleFilterPerson}
