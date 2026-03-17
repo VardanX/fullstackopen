@@ -57,6 +57,20 @@ app.delete("/api/persons/:id", (request, response) => {
 app.post("/api/persons/", (request, response) => {
     const id = Math.floor(Math.random() * ((30000 - phonebook.length) + phonebook.length));
     let contact = request.body
+
+    if(!contact.name || !contact.number){
+        return response.status(400).json({
+            error: 'content missing'
+        })
+    }
+
+    let ifContactExists = phonebook.find(phone => phone.name === contact.name)
+    if(ifContactExists){
+        return response.status(400).json({
+            error: 'name must be unique'
+        })
+    }
+
     contact["id"] = id;
     phonebook.push(contact)
     response.json(contact);
