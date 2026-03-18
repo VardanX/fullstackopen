@@ -2,9 +2,21 @@ const express = require("express");
 const morgan = require("morgan");
 const app = express();
 
-
 app.use(express.json());
-app.use(morgan("tiny"));
+
+morgan.token("post", (request, _response) => {
+  "use strict";
+  if (request.method === "POST"){
+    return JSON.stringify(request.body);
+    }else return "";
+});
+
+morgan.format(
+  "postFormat",
+  ":method :url :status :res[content-length] - :response-time ms | :post",
+);
+
+app.use(morgan("postFormat"));
 
 
 let phonebook = [
