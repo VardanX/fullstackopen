@@ -82,9 +82,6 @@ app.delete("/api/persons/:id", (request, response) => {
 });
 
 app.post("/api/persons/", (request, response) => {
-  const id = Math.floor(
-    Math.random() * (30000 - phonebook.length + phonebook.length),
-  );
   let contact = request.body;
 
   if (!contact.name || !contact.number) {
@@ -93,16 +90,25 @@ app.post("/api/persons/", (request, response) => {
     });
   }
 
-  let ifContactExists = phonebook.find((phone) => phone.name === contact.name);
+  let ifContactExists = "";
+
+  Person.find(contact).then(savedContact => {
+    savedContact ? ifContactExists = true : ifContactExists = false;
+  })
   if (ifContactExists) {
     return response.status(400).json({
       error: "name must be unique",
     });
-  }
+  }else{
+    const newContact = new Person({
+      name : contact.name,
+      number : contact.number,
+    })
 
-  contact["id"] = id;
-  phonebook.push(contact);
-  response.json(contact);
+    newContact.save().then(savedContact => {
+      response.json(savedContact)
+    })
+  }
 });
 
 const PORT = process.env.PORT || 3001;
