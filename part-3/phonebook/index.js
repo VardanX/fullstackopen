@@ -47,6 +47,15 @@ let phonebook = [
   },
 ];
 
+const errorHandler = (error, request, response, next) => {
+  console.log(error.message);
+
+  if (error.name === "CastError") {
+    return response.status(400).send({ error: "malformatted id" });
+  }
+  next(error);
+};
+
 
 app.use(express.json());
 
@@ -62,7 +71,7 @@ app.get("/info", (request, response) => {
   response.send(`<h4>${entries}</h4><h4>${now}</h4>`);
 });
 
-app.get("/api/persons/:id", (request, response) => {
+app.get("/api/persons/:id", (request, response, next) => {
   const id = request.params.id;
 
   // const contact = phonebook.find((person) => person.id === id);
@@ -72,7 +81,8 @@ app.get("/api/persons/:id", (request, response) => {
     } else {
       response.status(404).end();
     }
-  });
+  })
+    .catch(error => next(error));
 
 });
 
@@ -116,7 +126,7 @@ app.post("/api/persons/", (request, response) => {
   }
 });
 
-// app.use(errorHandler);
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
