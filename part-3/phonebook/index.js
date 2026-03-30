@@ -59,16 +59,23 @@ const errorHandler = (error, request, response, next) => {
 
 app.use(express.json());
 
-app.get("/api/persons", (request, response) => {
+app.get("/api/persons", (request, response, next) => {
   Person.find({}).then(person => {
     response.json(person);
-  });
+  })
+  .catch(error => next(error));
 });
 
-app.get("/info", (request, response) => {
-  const entries = `Phonebook has info for ${phonebook.length} people`;
-  let now = new Date();
-  response.send(`<h4>${entries}</h4><h4>${now}</h4>`);
+app.get("/info", (request, response, next) => {
+  "use strict";
+  Person.countDocuments({})
+    .then((results) => {
+      response.send(`
+    <p>Phonebook has info for ${results} people</p>
+    <p>${new Date()}</p>
+    `);
+    })
+    .catch((error) => next(error));
 });
 
 app.get("/api/persons/:id", (request, response, next) => {
