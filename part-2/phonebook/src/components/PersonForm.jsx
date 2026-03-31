@@ -17,7 +17,7 @@ const Number = ({onChange, value}) => {
       <div>
         number:{" "}
         <input
-          type="number"
+          type="text"
           id="number"
           onChange={onChange}
           value={value}

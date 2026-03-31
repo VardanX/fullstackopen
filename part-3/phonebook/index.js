@@ -97,22 +97,21 @@ app.get("/api/persons/:id", (request, response, next) => {
 
 app.put("/api/persons/:id", (request, response, next) => {
   const {name, number} = request.body;
-  Person.findById(request.params.id)
-    .then(contact => {
-      if(!contact){
-        response.status(404).end()
+  Person.findById(request.params.id, { runValidators: true })
+    .then((contact) => {
+      if (!contact) {
+        response.status(404).end();
       }
 
       contact.name = name;
       contact.number = number;
 
-      return contact.save().then(updatedContact => {
-        response.json(updatedContact)
-      })
-
+      return contact.save().then((updatedContact) => {
+        response.json(updatedContact);
+      });
     })
-    .catch(error => {
-      next(error)
+    .catch((error) => {
+      next(error);
     });
 
 });

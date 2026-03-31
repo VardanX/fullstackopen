@@ -51,8 +51,8 @@ const App = () => {
             setCount(count + 1)
             notify(`Updated ${newName}`, false)
           })
-          .catch(() => {
-            notify(`Information about ${newName} has already been removed from the server`, newName, true)
+          .catch((error) => {
+            // notify(`Information about ${newName} has already been removed from the server`, newName, true)
             if (error.response.data.error) {
               notify(error.response.data.error, true);
             }
