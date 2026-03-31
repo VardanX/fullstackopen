@@ -1,46 +1,46 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose')
 
-mongoose.set("strictQuery", false);
+mongoose.set('strictQuery', false)
 
-const url = process.env.MONGODB_URI;
+const url = process.env.MONGODB_URI
 
-console.log("connecting to", url);
+console.log('connecting to', url)
 
 mongoose
   .connect(url)
-  .then((result) => {
-    console.log("connected to MongoDB");
+  .then(() => {
+    console.log('connected to MongoDB')
   })
   .catch((error) => {
-    console.log("error connecting to MongoDB:", error.message);
-  });
+    console.log('error connecting to MongoDB:', error.message)
+  })
 
 const isValidPhoneNumber = (phoneNumber) => {
-  
-  const pattern = /^\d{2,3}-\d+$/;
-  return pattern.test(phoneNumber) && phoneNumber.length >= 8;
-};
+
+  const pattern = /^\d{2,3}-\d+$/
+  return pattern.test(phoneNumber) && phoneNumber.length >= 8
+}
 
 const personSchema = new mongoose.Schema({
-    name: {
-      type: String,
-      minLength : [3, `{VALUE} is shorter than the minimum allowed length (3)`],
-      required: true
-    },
-    number: {
-      type: String,
-      minLength: [8, `{VALUE} is shorter than the required number length`],
-      required: true,
-      validate: [isValidPhoneNumber, 'Not a valid phone number'],
-    }
-});
-
-personSchema.set("toJSON", {
-  transform: (document, returnedObject) => {
-    returnedObject.id = returnedObject._id.toString();
-    delete returnedObject._id;
-    delete returnedObject.__v;
+  name: {
+    type: String,
+    minLength : [3, '{VALUE} is shorter than the minimum allowed length (3)'],
+    required: true
   },
-});
+  number: {
+    type: String,
+    minLength: [8, '{VALUE} is shorter than the required number length'],
+    required: true,
+    validate: [isValidPhoneNumber, 'Not a valid phone number'],
+  }
+})
 
-module.exports = mongoose.model("Person", personSchema);
+personSchema.set('toJSON', {
+  transform: (document, returnedObject) => {
+    returnedObject.id = returnedObject._id.toString()
+    delete returnedObject._id
+    delete returnedObject.__v
+  },
+})
+
+module.exports = mongoose.model('Person', personSchema)
