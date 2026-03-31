@@ -50,8 +50,10 @@ let phonebook = [
 const errorHandler = (error, request, response, next) => {
   console.log(error.message);
 
-  if (error.name === "CastError") {
-    return response.status(400).send({ error: "malformatted id" });
+  if(error.name === "CastError") {
+    return response.status(400).json({error: "malformatted id"});
+  }else if(error.name === "ValidationError") {
+    return response.status(400).json({error: error.message });
   }
   next(error);
 };
@@ -95,7 +97,6 @@ app.get("/api/persons/:id", (request, response, next) => {
 
 app.put("/api/persons/:id", (request, response, next) => {
   const {name, number} = request.body;
-
   Person.findById(request.params.id)
     .then(contact => {
       if(!contact){
@@ -110,7 +111,9 @@ app.put("/api/persons/:id", (request, response, next) => {
       })
 
     })
-    .catch(error => next(error));
+    .catch(error => {
+      next(error)
+    });
 
 });
 
@@ -124,7 +127,7 @@ app.delete("/api/persons/:id", (request, response, next) => {
     .catch(error => next(error))
 });
 
-app.post("/api/persons/", (request, response) => {
+app.post("/api/persons/", (request, response, next) => {
   let contact = request.body;
 
   if (!contact.name || !contact.number) {
@@ -150,7 +153,7 @@ app.post("/api/persons/", (request, response) => {
 
     newContact.save().then(savedContact => {
       response.json(savedContact)
-    })
+    }).catch(error => {next(error)});
   }
 });
 

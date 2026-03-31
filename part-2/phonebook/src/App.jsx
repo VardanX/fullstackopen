@@ -53,6 +53,9 @@ const App = () => {
           })
           .catch(() => {
             notify(`Information about ${newName} has already been removed from the server`, newName, true)
+            if (error.response.data.error) {
+              notify(error.response.data.error, true);
+            }
           });
       }
     }else{
@@ -61,7 +64,9 @@ const App = () => {
           setPersons((prev) => [...prev, contact])
           notify(`Added ${newName}`, false)
         })
-        .catch(() => alert("Something went wrong!"));
+        .catch(error => {
+          notify(error.response.data.error, true)
+        });
     }
   }
 
