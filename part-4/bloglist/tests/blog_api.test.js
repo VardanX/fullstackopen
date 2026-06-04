@@ -100,6 +100,29 @@ test('if like property is missing from the request, it will default to the value
 
 });
 
+test(
+"if the title or url properties are missing from the request data, the backend responds to the request with the status code 400 Bad Request.",
+  async() => {
+    const noTitle = {
+      author: "Nami",
+      url: "www.onePiece.com/nami",
+      likes: 69,
+    };
+
+    const noUrl = {
+      title: "No url",
+      author: "Ussop",
+      likes: 109,
+    };
+
+    await api.post('/api/blogs').send(noTitle).expect(400);
+    await api.post("/api/blogs").send(noUrl).expect(400);
+
+    const response = await api.get("/api/blogs");
+    assert.strictEqual(response.body.length, initialBlogs.length);
+  }
+);
+
 after(async() => {
     await mongoose.connection.close();
 })

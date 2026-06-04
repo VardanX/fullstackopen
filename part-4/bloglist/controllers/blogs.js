@@ -9,13 +9,18 @@ blogsRouter.get("/", async (request, response) => {
 });
 
 blogsRouter.post("/", async (request, response) => {
-  const blog = new Blog({
-    ...request.body,
-    likes: request.body.likes || false,
-  });
 
-  let result = await blog.save();
-  response.status(201).json(result);
+  if("title" in request.body === false || "url" in request.body === false){
+    response.status(400).json({ error: 'title or url is missing' })
+  }else{
+    const blog = new Blog({
+      ...request.body,
+      likes: request.body.likes || false,
+    });
+
+    let result = await blog.save();
+    response.status(201).json(result);
+  }
 
 });
 
