@@ -59,6 +59,27 @@ test('unique identifier property of the blog post in named id', async () => {
 
 });
 
+test('HTTP POST request to the /api/blogs URL successfully creates a new blog post', async () => {
+    const newBlog = {
+      title: "New Blog",
+      author: "Buffy",
+      url: "www.onePiece.com/newBlog",
+      likes: 69
+    };
+
+    await api
+      .post("/api/blogs")
+      .send(newBlog)
+      .expect(201)
+      .expect("Content-Type", /application\/json/);
+
+    const response = await api.get('/api/blogs');
+    let titles = response.body.map(b => b.title)
+    assert(titles.includes('New Blog'))
+    assert.strictEqual(response.body.length, initialBlogs.length + 1)
+
+})
+
 after(async() => {
     await mongoose.connection.close();
 })
