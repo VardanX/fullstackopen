@@ -80,6 +80,26 @@ test('HTTP POST request to the /api/blogs URL successfully creates a new blog po
 
 })
 
+
+test('if like property is missing from the request, it will default to the value 0', async() => {
+    const noLikesBlog = {
+      title: "No Like",
+      author: "Boa",
+      url: "www.onePiece.com/noLike",
+    };
+
+    await api
+      .post("/api/blogs")
+      .send(noLikesBlog)
+      .expect(201)
+      .expect("Content-Type", /application\/json/);
+
+    const response = await api.get('/api/blogs')
+    assert.strictEqual(response.body[2].likes, 0)
+
+
+});
+
 after(async() => {
     await mongoose.connection.close();
 })
